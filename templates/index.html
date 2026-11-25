@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Network Router Store</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>Network Router Configuration Store</h1>
+        <p>Manage your router configurations in one place</p>
+    </header>
+
+    <main>
+
+        <section class="dashboard">
+            <h2>Dashboard</h2>
+            <h3>Total Registered Routers: {{ routers|length }}</h3>
+        </section>
+
+        <section class="panel">
+
+            <h2>Add New Router</h2>
+
+            <form action="/add" method="POST">
+
+                <label>Device Name</label>
+                <input type="text"
+                       name="device_name"
+                       placeholder="Example: Router_01"
+                       required>
+
+                <label>IP Address</label>
+                <input type="text"
+                       name="ip_address"
+                       placeholder="192.168.1.1"
+                       required>
+
+                <label>Port Number</label>
+                <input type="number"
+                       name="port"
+                       placeholder="8080"
+                       min="1"
+                       max="65535"
+                       required>
+
+                <button type="submit">Add Router</button>
+
+            </form>
+
+        </section>
+
+        <section class="panel">
+
+            <h2>Search Router</h2>
+
+            <form action="/" method="GET">
+
+                <input type="text"
+                       name="search"
+                       placeholder="Enter device name"
+                       value="{{ search }}">
+
+                <button type="submit">Search</button>
+
+                <a href="/">Show All</a>
+
+            </form>
+
+        </section>
+
+        <section class="panel">
+
+            <h2>Router Configurations</h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <p class="message {{ category }}">{{ message }}</p>
+                {% endfor %}
+            {% endwith %}
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Device Name</th>
+                        <th>IP Address</th>
+                        <th>Port</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for name, config in routers.items() %}
+
+                    <tr>
+                      <td>{{ name }}</td>
+                      <td>{{ config[0] }}</td>
+                      <td>{{ config[1] }}</td>
+
+                    <td>
+                        <form action="{{ url_for('delete_router_route', device_name=name) }}"
+                             method="POST">
+
+                             <button type="submit" class="delete-btn">
+                                Delete
+                             </button>
+
+                        </form>
+                    </td>
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="4">No routers found.</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Network Router Configuration Store | RSTD</p>
+    </footer>
+
+</body>
+</html>

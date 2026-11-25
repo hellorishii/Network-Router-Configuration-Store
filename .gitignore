@@ -1,0 +1,20 @@
+
+# Virtual environment
+.venv/
+
+# Python temporary files
+__pycache__/
+*.pyc
+
+# Secret environment variables
+.env
+
+# VS Code settings
+.vscode/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Local router configurations
+data/routers.json
